@@ -62,7 +62,10 @@ Sharded vs Atomic w teście throughput (same statusy 200):
 Nie ma jednego rozwiązania dla każdego problemu. Można pójść dalej w stronę
 architektur znanych z Shopify czy podobnych dużych systemów, w tym z dodaniem
 cache'u. Wybór zależy od oczekiwanego ruchu i wymagań biznesowych.
-Rozwiązanie z sharded encjami jest rozwiazaniem które może być 
+Rozwiązanie z sharded encjami jest rozwiazaniem które może być wystarczające dla większości przypadków
+i jest stosowane przez duże korporacje jak Google. 
+Mogłem też napisać rozwiązanie z Redis + Lua które jest jeszcze wydajniejsze ale może to być również Overengineering. 
+To zależy, jak wszystko w tej branży.
 
 ### Reprodukcja
 
