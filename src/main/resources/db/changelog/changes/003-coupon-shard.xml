@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="003-create-coupon-shard" author="coupons">
+        <createTable tableName="coupon_shard">
+            <column name="coupon_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_coupon_shard_coupon"
+                             references="coupon(id)"/>
+            </column>
+            <column name="shard_id" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_uses" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_uses" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="coupon_shard"
+                       columnNames="coupon_id, shard_id"
+                       constraintName="pk_coupon_shard"/>
+
+        <sql>ALTER TABLE coupon_shard ADD CONSTRAINT chk_coupon_shard_max_uses_positive CHECK (max_uses &gt; 0);</sql>
+        <sql>ALTER TABLE coupon_shard ADD CONSTRAINT chk_coupon_shard_current_uses_nonneg CHECK (current_uses &gt;= 0);</sql>
+        <sql>ALTER TABLE coupon_shard ADD CONSTRAINT chk_coupon_shard_uses_bounds CHECK (current_uses &lt;= max_uses);</sql>
+    </changeSet>
+
+</databaseChangeLog>

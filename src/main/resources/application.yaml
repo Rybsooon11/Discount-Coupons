@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: DiscountCoupons
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/coupons}
+    username: ${DB_USER:coupons}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  cache:
+    type: caffeine
+    cache-names: geoCountryByIp
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=1h
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+coupons:
+  strategy: atomic-update
+  sharded:
+    shards: 16
+    fallback-attempts: 3
+  geo:
+    base-url: http://ip-api.com
+    timeout-ms: 2000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.example.discountcoupons: INFO

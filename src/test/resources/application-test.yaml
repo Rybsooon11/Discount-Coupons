@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    password: ignored-by-testcontainers
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  cache:
+    type: caffeine
+    cache-names: geoCountryByIp
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=1h
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+coupons:
+  strategy: atomic-update
+  sharded:
+    shards: 16
+    fallback-attempts: 3
+  geo:
+    base-url: http://localhost:0
+    timeout-ms: 2000
+
+logging:
+  level:
+    com.example.discountcoupons: DEBUG
+    org.hibernate.SQL: INFO

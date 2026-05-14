@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 100
+
+server:
+  tomcat:
+    threads:
+      max: 400
+    accept-count: 1000
+    max-connections: 4000
+
+coupons:
+  strategy: atomic-update
+
+logging:
+  level:
+    root: WARN
+    com.example.discountcoupons: INFO
+    org.hibernate.SQL: WARN
